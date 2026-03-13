@@ -1,0 +1,68 @@
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+}
+
+model User {
+  id        String   @id @default(uuid())
+  name      String
+  email     String   @unique
+  createdAt DateTime @default(now()) @map("created_at")
+  files     File[]
+
+  @@map("users")
+}
+
+model File {
+  id         String   @id @default(uuid())
+  userId     String   @map("user_id")
+  user       User     @relation(fields: [userId], references: [id])
+  filePath   String   @map("file_path")
+  fileName   String   @map("file_name")
+  fileSize   Int      @map("file_size")
+  mimeType   String   @map("mime_type")
+  uploadedAt DateTime @default(now()) @map("uploaded_at")
+  job        Job?
+
+  @@index([userId])
+  @@map("files")
+}
+
+model Job {
+  id         String    @id @default(uuid())
+  fileId     String    @unique @map("file_id")
+  file       File      @relation(fields: [fileId], references: [id], onDelete: Cascade)
+  status     JobStatus @default(PENDING)
+  progress   Int       @default(0)
+  retryCount Int       @default(0) @map("retry_count")
+  errorMsg   String?   @map("error_message")
+  createdAt  DateTime  @default(now()) @map("created_at")
+  updatedAt  DateTime  @updatedAt @map("updated_at")
+  result     Result?
+
+  @@index([status])
+  @@map("jobs")
+}
+
+model Result {
+  id             String   @id @default(uuid())
+  jobId          String   @unique @map("job_id")
+  wordCount      Int      @map("word_count")
+  paragraphCount Int      @map("paragraph_count")
+  keywords       String[]
+  createdAt      DateTime @default(now()) @map("created_at")
+
+  job Job @relation(fields: [jobId], references: [id], onDelete: Cascade)
+
+  @@map("results")
+}
+
+enum JobStatus {
+  PENDING
+  PROCESSING
+  COMPLETED
+  FAILED
+}
