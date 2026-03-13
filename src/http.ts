@@ -1,5 +1,7 @@
 import "dotenv/config";
+import { errorMiddleware } from "./middlewares/error.middleware.js";
 import express, { type Express } from "express";
+import { router } from "./routes/index.js";
 import helmet from "helmet";
 
 const createHttp = (): Express => {
@@ -7,8 +9,8 @@ const createHttp = (): Express => {
   app.use(express.json());
   app.use(express.urlencoded({ extended: true }));
   app.use(helmet());
-  // here we will use the routes
-  // app.use("/api/upload" , routes);
+  app.use("/api", router);
+  app.use(errorMiddleware);
   return app;
 };
 

@@ -2,7 +2,7 @@ import { db } from "../lib/prisma.js";
 import { JobStatus } from "@prisma/client";
 
 const createJob = async (fileId: string) => {
-  await db.job.create({
+  return db.job.create({
     data: {
       fileId,
       status: JobStatus.PENDING,
