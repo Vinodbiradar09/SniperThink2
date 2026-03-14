@@ -37,6 +37,9 @@ const incrementJobRetry = async (jobId: string) => {
     data: {
       retryCount: { increment: 1 },
     },
+    select: {
+      retryCount: true,
+    },
   });
 };
 

@@ -19,7 +19,7 @@ const redis = new Redis(process.env.REDIS_URL!, {
   lazyConnect: false,
   enableOfflineQueue: true,
   connectTimeout: 10000,
-  commandTimeout: 5000,
+  // commandTimeout: 5000,
 });
 
 redis.on("connect", () => {

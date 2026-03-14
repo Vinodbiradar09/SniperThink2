@@ -5,7 +5,11 @@
   "main": "index.js",
   "type": "module",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "build": "tsc",
+    "start": "node dist/src/index.js",
+    "start:worker": "node dist/src/workers/fileProcessor.js",
+    "start:watchdog": "node dist/src/workers/watchdog.js"
   },
   "keywords": [],
   "author": "",
