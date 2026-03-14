@@ -1,7 +1,7 @@
 import "dotenv/config";
 import { getJobWithFile } from "../services/job.service.js";
 import { saveResult } from "../services/result.service.js";
-import { parseFile } from "../utils/textParser.js";
+import { deleteFile, parseFile } from "../utils/textParser.js";
 import { redis } from "../config/redis.js";
 import { JobStatus } from "@prisma/client";
 import {
@@ -63,6 +63,7 @@ const processJob = async (jobId: string): Promise<void> => {
       result.paragraphCount,
       result.topKeywords,
     );
+    deleteFile(job.file.filePath);
     await updateJobProgress(jobId, 100, "completed");
     await updateJobStatus(jobId, JobStatus.COMPLETED, 100);
     await removeFromProcessing(jobId);

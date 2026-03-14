@@ -129,4 +129,16 @@ const parseFile = async (
   return { wordCount, paragraphCount, topKeywords };
 };
 
-export { parseFile };
+const deleteFile = (filePath: string): void => {
+  try {
+    const absolutePath = path.resolve(filePath);
+    if (fs.existsSync(absolutePath)) {
+      fs.unlinkSync(absolutePath);
+      console.log(`deleted file: ${absolutePath}`);
+    }
+  } catch (err) {
+    console.error(`failed to delete file: ${filePath}`, err);
+  }
+};
+
+export { parseFile, deleteFile };
